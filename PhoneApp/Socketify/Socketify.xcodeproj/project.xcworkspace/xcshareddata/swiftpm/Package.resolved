@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftSocket",
+        "repositoryURL": "https://github.com/swiftsocket/SwiftSocket",
+        "state": {
+          "branch": null,
+          "revision": "1d198599701c12ba21eddb7af318d4c2ef70458f",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
