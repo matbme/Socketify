@@ -27,6 +27,7 @@ struct ContentView: View {
     var body: some View {
 		ZStack {
 			LinearGradient(gradient: Gradient(colors: [.white, .red, .red]), startPoint: .top, endPoint: .bottom)
+				.edgesIgnoringSafeArea(.all)
 			
 			VStack {
 				if let image = image {
@@ -65,6 +66,13 @@ struct ContentView: View {
 						playbackStatus
 							.foregroundColor(.white)
 							.font(.largeTitle)
+					}
+					.onTapGesture {
+						if playbackStatus == Image("play.fill") {
+							playbackStatus = Image("pause.fill")
+						} else {
+							playbackStatus = Image("play.fill")
+						}
 					}
 					
 					Button {
@@ -116,6 +124,8 @@ struct ContentView: View {
     }
 	
 	func makeRequest(_ request: String, forClient client: TCPClient) -> String? {
+		guard request != "" else { return nil }
+		
 		var response: String? = nil
 		switch client.connect(timeout: 10) {
 			case .success:
