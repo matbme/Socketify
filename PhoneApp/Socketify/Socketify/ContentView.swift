@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftSocket
 import Combine
 import UIKit
+import CoreImage
 
 struct ContentView: View {
 	let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
@@ -17,64 +18,73 @@ struct ContentView: View {
 	@State private var client = TCPClient(address: "192.168.0.15", port: 8888)
 	
 	@State private var nowPlaying: String = ""
+	@State private var artist: String = ""
 	@State private var playbackStatus: Image = Image(systemName: "icloud.slash")
 	
 	@State private var artURL: String = ""
 	@State var image: UIImage? = nil
 	
     var body: some View {
-		VStack {
-			if let image = image {
-				Image(uiImage: image)
-					.resizable()
-					.aspectRatio(contentMode: .fit)
-			} else {
-				Image(systemName: "xmark.circle.fill")
-			}
+		ZStack {
+			LinearGradient(gradient: Gradient(colors: [.white, .red, .red]), startPoint: .top, endPoint: .bottom)
 			
-			ZStack {
-				Rectangle()
-					.fill(Color.red)
-					.frame(height: 50)
+			VStack {
+				if let image = image {
+					Image(uiImage: image)
+						.resizable()
+						.aspectRatio(contentMode: .fit)
+						.padding()
+						.shadow(radius: 5)
+						.padding(.top, 20)
+				} else {
+					Image(systemName: "xmark.circle.fill")
+						.padding(.top, 20)
+				}
 				
-				HStack {
-					Text("\(nowPlaying)")
-						.font(.callout)
-						.foregroundColor(.white)
-						.lineLimit(2)
+				Text("\(nowPlaying)")
+					.font(.headline)
+					.fontWeight(.bold)
+					.foregroundColor(.white)
+				
+				Text("\(artist)")
+					.font(.subheadline)
+					.foregroundColor(.white)
+				
+				HStack(alignment: .center, spacing: 50) {
+					Button {
+						makeRequest("prev", forClient: client)
+					} label: {
+						Image(systemName: "backward.end.fill")
+							.foregroundColor(.white)
+							.font(.largeTitle)
+					}
 					
-					Spacer()
+					Button {
+						makeRequest("playpause", forClient: client)
+					} label: {
+						playbackStatus
+							.foregroundColor(.white)
+							.font(.largeTitle)
+					}
 					
-					HStack(alignment: .center, spacing: 20) {
-						Button {
-							makeRequest("prev", forClient: client)
-						} label: {
-							Image(systemName: "backward.end.fill")
-								.foregroundColor(.white)
-						}
-						
-						Button {
-							makeRequest("playpause", forClient: client)
-						} label: {
-							playbackStatus
-								.foregroundColor(.white)
-						}
-						
-						Button {
-							makeRequest("next", forClient: client)
-						} label: {
-							Image(systemName: "forward.end.fill")
-								.foregroundColor(.white)
-						}
+					Button {
+						makeRequest("next", forClient: client)
+					} label: {
+						Image(systemName: "forward.end.fill")
+							.foregroundColor(.white)
+							.font(.largeTitle)
 					}
 				}
-				.padding()
+				.padding(.top, 40)
+				
+				Spacer()
 			}
 		}
 		.onReceive(timer) { _ in
 			if let song = makeRequest("song", forClient: client) { //get current song
+				nowPlaying = song.dropLast() + ""
 				if let artist = makeRequest("artist", forClient: client) {
-					nowPlaying = artist.dropLast() + "\n" + song.dropLast()
+					self.artist = artist.dropLast() + ""
 				}
 			}
 			
