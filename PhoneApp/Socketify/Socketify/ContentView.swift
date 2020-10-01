@@ -7,18 +7,30 @@
 
 import SwiftUI
 import SwiftSocket
+import Combine
+import UIKit
 
 struct ContentView: View {
 	let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+	let artLoader = AlbumArtLoader()
 	
 	@State private var client = TCPClient(address: "192.168.0.15", port: 8888)
+	
 	@State private var nowPlaying: String = ""
 	@State private var playbackStatus: Image = Image(systemName: "icloud.slash")
+	
 	@State private var artURL: String = ""
+	@State var image: UIImage? = nil
 	
     var body: some View {
 		VStack {
-			getImageFromURL(forURL: artURL)
+			if let image = image {
+				Image(uiImage: image)
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+			} else {
+				Image(systemName: "xmark.circle.fill")
+			}
 			
 			ZStack {
 				Rectangle()
@@ -75,8 +87,21 @@ struct ContentView: View {
 			}
 			
 			if let url = makeRequest("arturl", forClient: client) {
-				artURL = url.dropLast() + ""
+				artURL = url.dropLast().replacingOccurrences(of: "open.spotify.com", with: "i.scdn.co")
 			}
+			
+			guard let url = URL(string: artURL) else {
+				print("Invalid URL: \(artURL)")
+				return
+			}
+			
+			self.artLoader.load(url: url)
+		}
+		.onReceive(artLoader.objectWillChange) { image in
+			self.image = image
+		}
+		.onDisappear {
+			self.artLoader.cancel()
 		}
     }
 	
@@ -99,35 +124,6 @@ struct ContentView: View {
 		}
 		
 		return response
-	}
-	
-	func getImageFromURL(forURL: String) -> Image {
-		let replacedURL = forURL.dropLast().replacingOccurrences(of: "open.spotify.com", with: "i.scdn.co")
-		
-		guard let url = URL(string: replacedURL) else {
-			print("Invalid URL: \(replacedURL)")
-			return Image(systemName: "xmark.circle.fill")
-		}
-		
-		let request = URLRequest(url: url)
-		
-		URLSession.shared.dataTask(with: request) { data, response, error in
-			if let data = data {
-				print("data: ")
-				print(String(data: data, encoding: .utf8))
-				if let decodedResponse = try? JSONDecoder().decode(String.self, from: data) {
-					DispatchQueue.main.async {
-						print(decodedResponse)
-					}
-					return
-				}
-			} else {
-				print("No data")
-			}
-			print("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
-		}.resume()
-		
-		return Image(systemName: "xmark.circle.fill")
 	}
 }
 

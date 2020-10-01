@@ -13,6 +13,7 @@
 		C02C08ED2520006200F647D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C02C08EC2520006200F647D8 /* Preview Assets.xcassets */; };
 		C02C08F82520006300F647D8 /* SocketifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C08F72520006300F647D8 /* SocketifyTests.swift */; };
 		C02C09032520006300F647D8 /* SocketifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C09022520006300F647D8 /* SocketifyUITests.swift */; };
+		C073540A252615B3008E5EB2 /* AlbumArtLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0735409252615B3008E5EB2 /* AlbumArtLoader.swift */; };
 		C099828E2520105E00D25E01 /* SwiftSocket in Frameworks */ = {isa = PBXBuildFile; productRef = C099828D2520105E00D25E01 /* SwiftSocket */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,7 @@
 		C02C08FE2520006300F647D8 /* SocketifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C02C09022520006300F647D8 /* SocketifyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketifyUITests.swift; sourceTree = "<group>"; };
 		C02C09042520006300F647D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C0735409252615B3008E5EB2 /* AlbumArtLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumArtLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				C02C08E52520005F00F647D8 /* SocketifyApp.swift */,
 				C02C08E72520005F00F647D8 /* ContentView.swift */,
+				C0735409252615B3008E5EB2 /* AlbumArtLoader.swift */,
 				C02C08E92520006200F647D8 /* Assets.xcassets */,
 				C02C08EE2520006200F647D8 /* Info.plist */,
 				C02C08EB2520006200F647D8 /* Preview Content */,
@@ -267,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C073540A252615B3008E5EB2 /* AlbumArtLoader.swift in Sources */,
 				C02C08E82520005F00F647D8 /* ContentView.swift in Sources */,
 				C02C08E62520005F00F647D8 /* SocketifyApp.swift in Sources */,
 			);
