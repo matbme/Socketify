@@ -24,9 +24,12 @@ while True:
     msg = msg.decode("utf-8")
     print("client requested " + msg) 
 
-    out = subprocess.check_output(['spotifycli', '--' + msg])
-    out = out.decode("utf-8") 
-    print("server will return " + out)
-    conn.sendall(str.encode(out))
+    try:
+        out = subprocess.check_output(['spotifycli', '--' + msg])
+        out = out.decode("utf-8") 
+        print("server will return " + out)
+        conn.sendall(str.encode(out))
+    except:
+        print("server did not understand input")
 
     conn.close()
